@@ -58,13 +58,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OSBConnection\OSBConnection.csproj">
+    <ProjectReference Include="..\OpenEngSBConnection\OpenEngSBConnection.csproj">
       <Project>{4b7428ba-9371-4141-b40b-f22e4cc05408}</Project>
-      <Name>OSBConnection</Name>
+      <Name>OpenEngSBConnection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sonatype\Sonatype.csproj">
+    <ProjectReference Include="..\Sonatype\SonaType.csproj">
       <Project>{e261fd60-68e1-496f-b802-8766bcd8f9ea}</Project>
-      <Name>Sonatype</Name>
+      <Name>SonaType</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

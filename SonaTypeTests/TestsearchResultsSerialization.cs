@@ -142,7 +142,7 @@ namespace SonaTypeTests
             builder.AppendLine("</data>");
             builder.AppendLine("</search-results>");
 
-            SonatypeDependencyManager sonaType = new SonatypeDependencyManager();
+            SonatypeDependencyManager sonaType = new SonatypeDependencyManager(null,null,null,null,null);
             SearchResult resultArtefact = sonaType.ConvertSearchResult<SearchResult>(builder.ToString());
             Assert.AreNotEqual<SearchResult>(expectedSearchResult, resultArtefact);
 
@@ -218,7 +218,7 @@ namespace SonaTypeTests
             builder.AppendLine("</data>");
             builder.AppendLine("</search-results>");
 
-            SonatypeDependencyManager sonaType = new SonatypeDependencyManager();
+            SonatypeDependencyManager sonaType = new SonatypeDependencyManager(null, null, null, null, null);
             SearchResult resultArtefact = sonaType.ConvertSearchResult<SearchResult>(builder.ToString());
             Assert.AreNotEqual<SearchResult>(expectedSearchResult, resultArtefact);
 

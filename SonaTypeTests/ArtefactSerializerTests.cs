@@ -105,7 +105,7 @@ namespace SonaTypeTests
             builder.AppendLine("<artifactLink>https://repository.sonatype.org/service/local/artifact/maven/redirect?r=ossrh-snapshot&amp;g=org.openengsb.framework&amp;a=openengsb-framework&amp;v=2.6.0-SNAPSHOT&amp;e=zip&amp;c=src</artifactLink>");
             builder.AppendLine("</artifact>");
 
-            SonatypeDependencyManager sonaType = new SonatypeDependencyManager();
+            SonatypeDependencyManager sonaType = new SonatypeDependencyManager(null,null,null,null,null);
             Artifact resultArtefact = sonaType.ConvertSearchResult<Artifact>(builder.ToString());
             Assert.AreNotEqual<Artifact>(expectedResult, resultArtefact);
         }

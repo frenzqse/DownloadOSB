@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +24,8 @@ namespace Sonatype.SearchResultXmlStructure
         [XmlArray("data")]
         public List<Artifact> artefacts { get; set; }
 
-        public SearchResult() {
+        public SearchResult()
+        {
             artefacts = new List<Artifact>();
         }
         public override Boolean Equals(Object artifact1)
@@ -45,17 +47,28 @@ namespace Sonatype.SearchResultXmlStructure
 
         private Boolean AreNotEqual(Object obj1Value, Object obj2Value)
         {
-            if (obj2Value != null && !obj2Value.Equals(obj1Value))
+            if (obj2Value != null && isNotEqual(obj2Value, obj1Value))
             {
                 return true;
             }
-            else if (obj1Value != null && !obj1Value.Equals(obj2Value))
+            else if (obj1Value != null && isNotEqual(obj1Value, obj2Value))
             {
                 return true;
             }
             return false;
         }
-
+        public Boolean isNotEqual(Object obj1, Object obj2)
+        {
+            if (obj1 is ICollection && obj2 is ICollection)
+            {
+                int objCollectionSize = ((ICollection)obj1).Count;
+                if (objCollectionSize == ((ICollection)obj2).Count && objCollectionSize == 0)
+                {
+                    return false;
+                }
+            }
+            return !obj1.Equals(obj2);
+        }
         public override int GetHashCode()
         {
             return base.GetHashCode();

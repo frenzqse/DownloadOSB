@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 
 namespace OSBConnection
 {
-    public class OSB
+    public class OpenEngSBConnection
     {
+        private const String openEngSBBatLocation = @"\bin\openengsb.bat";
         private SshClient osbClient;
         private String osbFolderLocation = "";
         private String username = "karaf";
@@ -20,30 +21,33 @@ namespace OSBConnection
         private int port = 8101;
         private Process osbProcess;
         private static int retries;
-        private Process[] startJavaprocesses;
+        
         public Boolean isOSBConnectionOpen { get; private set; }
-        public OSB(String osbFolderLocation) {
+
+        public OpenEngSBConnection(String osbFolderLocation) {
             isOSBConnectionOpen = false;
             this.osbFolderLocation = osbFolderLocation;
             retries = 5;
-            startJavaprocesses= Process.GetProcessesByName("java");
         }
-        public OSB(String OSBUrl, String username, String password, int port, String osbFolderLocation):this(osbFolderLocation)
+        public OpenEngSBConnection(String OSBUrl, String username, String password, int port, String osbFolderLocation):this(osbFolderLocation)
         {
             this.OSBUrl = OSBUrl;
             this.username = username;
             this.password = password;
             this.port = port;
         }
+
         private void startOpenEngSB()
         {
-            ProcessStartInfo start = new ProcessStartInfo(osbFolderLocation + @"\bin\openengsb.bat");
+            ProcessStartInfo start = new ProcessStartInfo(osbFolderLocation + openEngSBBatLocation);
             start.WindowStyle = ProcessWindowStyle.Normal;
             start.CreateNoWindow = false;
             start.UseShellExecute = false;
             osbProcess = Process.Start(start);
+            //Wait until the OSB is started
             Thread.Sleep(5000);
         }
+
         public void connectToOSBWithSSH()
         {
             isOSBConnectionOpen = false;
@@ -55,6 +59,7 @@ namespace OSBConnection
             }
             catch (SocketException e)
             {
+                //The OSB is not started yet. Retry again
                 if (retries-- <= 0)
                 {
                     throw e;
@@ -64,29 +69,18 @@ namespace OSBConnection
             }
             isOSBConnectionOpen = true;
         }
+        
         public void executeCommand(String command)
         {
             osbClient.RunCommand(command);
         }
+
         public void closeConnection()
         {
             isOSBConnectionOpen = false;
             executeCommand("shutdown -f");
             Thread.Sleep(10000);
             osbClient.Disconnect();
-            osbProcess.WaitForExit(10000);
-            Process[] currentjavaprocesses = Process.GetProcessesByName("java");
-            foreach (Process process in currentjavaprocesses)
-            {
-                if (!startJavaprocesses.Contains(process))
-                {
-                    process.WaitForExit();
-                    if (!process.HasExited)
-                    {
-                        process.Kill();
-                    }
-                }
-            }
         }
     }
 }

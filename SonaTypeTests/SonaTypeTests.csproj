@@ -57,9 +57,9 @@
     <Compile Include="TestsearchResultsSerialization.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sonatype\Sonatype.csproj">
+    <ProjectReference Include="..\Sonatype\SonaType.csproj">
       <Project>{e261fd60-68e1-496f-b802-8766bcd8f9ea}</Project>
-      <Name>Sonatype</Name>
+      <Name>SonaType</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
