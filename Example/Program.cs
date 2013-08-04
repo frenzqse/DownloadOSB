@@ -5,6 +5,7 @@ using SonaTypeDependencies;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,10 +18,13 @@ namespace Example
     {
         static void Main(string[] args)
         {
+
             log4net.Config.BasicConfigurator.Configure();
-            SonatypeDependencyManager dm = new SonatypeDependencyManager("org.openengsb.framework", "openengsb-framework", "3.0.0-SNAPSHOT","zip",null);
-            String filename=dm.DownloadArtefactToFolder(@"C:\Users\frenz\Desktop\test");
-            string name = dm.UnzipFile(filename);
+            SonatypeDependencyManager dm = new SonatypeDependencyManager("org.openengsb.framework", "openengsb-framework", "3.0.0-SNAPSHOT", "zip", null);
+
+            //String filename = dm.DownloadArtefactToFolder(@"C:\Users\frenz\Desktop\test");
+              String filename = @"C:\Users\frenz\Desktop\test\openengsb-framework-3.0.0-20130731.091650-29.zip";
+            string name = dm.UnzipFile(filename, new FileInfo(filename).Directory.FullName);
             OpenEngSBConnection openengsb = new OpenEngSBConnection(name);
             openengsb.connectToOSBWithSSH();
             List<String> commands = new List<string>();
@@ -33,6 +37,5 @@ namespace Example
             }
             openengsb.closeConnection();
         }
-
     }
 }

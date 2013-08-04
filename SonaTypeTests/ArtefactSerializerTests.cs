@@ -77,7 +77,7 @@ namespace SonaTypeTests
             Assert.AreNotEqual<Artifact>(artefact, artefactNotEqual);
         }
         [TestMethod]
-        public void TestSerializer()
+        public void TestSerializerCreatesTheCorrectOutput()
         {
             Artifact expectedResult = new Artifact();
             expectedResult.ResourceUri = "https://repository.sonatype.org/service/local/repositories/ossrh-snapshot/content/org/openengsb/framework/openengsb-framework/2.6.0-SNAPSHOT/openengsb-framework-2.6.0-SNAPSHOT-src.zip";
@@ -109,5 +109,6 @@ namespace SonaTypeTests
             Artifact resultArtefact = sonaType.ConvertSearchResult<Artifact>(builder.ToString());
             Assert.AreNotEqual<Artifact>(expectedResult, resultArtefact);
         }
+
     }
 }

@@ -10,12 +10,12 @@ namespace Sonatype.SearchResultXmlStructure
     {
         src,pom, zip
     }
-    public class HtmlAtifact : Artifact
+    public class HtmlArtifact : Artifact
     {
         private const String LinkEndTak = "</a>";
         private const String HrefStart = "<a href=\"";
-        public HtmlAtifact() { }
-        public HtmlAtifact(String href)
+        public HtmlArtifact() { }
+        public HtmlArtifact(String href)
         {
             int start = href.IndexOf("=") + 1;
             int end = href.IndexOf(">");
@@ -29,7 +29,7 @@ namespace Sonatype.SearchResultXmlStructure
                 this.ArtifactId = name;
                 return;
             }
-            this.Packaging = name.Substring(name.LastIndexOf(".")+1);
+            this.Packaging = name.Substring(name.LastIndexOf(".") + 1);
             StringBuilder builder = new StringBuilder();
             foreach (String element in name.Split('-'))
             {
@@ -43,8 +43,8 @@ namespace Sonatype.SearchResultXmlStructure
                     break;
                 }
             }
-            this.Version = name.Replace(this.ArtifactId,"").Replace(this.Packaging,"");
-            this.Version = Version.Substring(1);
+            this.Version = name.Replace(this.ArtifactId, "").Replace(this.Packaging, "");
+            this.Version = Version.Substring(1,this.Version.Length-2);
             foreach (Classifier classifier in Enum.GetValues(typeof(Classifier)))
             {
                 if (Version.Contains(classifier.ToString()))
@@ -75,7 +75,7 @@ namespace Sonatype.SearchResultXmlStructure
         {
             List<Artifact> result = new List<Artifact>();
             String intermediatResult = "";
-            HtmlAtifact sa = new HtmlAtifact();
+            HtmlArtifact sa = new HtmlArtifact();
             String tmp = htmlpage;
             while (tmp.Contains(HrefStart))
             {
@@ -83,7 +83,7 @@ namespace Sonatype.SearchResultXmlStructure
                 int start = tmp.IndexOf(HrefStart);
                 intermediatResult = tmp.Substring(start, end - start);
                 tmp = tmp.Substring(end);
-                result.Add(new HtmlAtifact(intermediatResult));
+                result.Add(new HtmlArtifact(intermediatResult));
             }
             return result;
         }

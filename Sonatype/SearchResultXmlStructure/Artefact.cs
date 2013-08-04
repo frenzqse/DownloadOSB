@@ -12,7 +12,7 @@ namespace Sonatype
 {
     [Serializable]
     [XmlType("artifact")]
-    public class Artifact : System.Object
+    public class Artifact : System.Object, IComparable<Artifact>
     {
         [XmlElement("resourceURI")]
         public String ResourceUri { get; set; }
@@ -49,11 +49,6 @@ namespace Sonatype
             PropertyInfo[] fields = typeof(Artifact).GetProperties();
             foreach (PropertyInfo field in fields)
             {
-                if (field.Name.Contains("PomLink"))
-                {
-                    int i = 0;
-                    i += 1;
-                }
                 if (AreNotEqual(field.GetValue(this), field.GetValue(artifact1)))
                 {
                     return false;
@@ -78,6 +73,50 @@ namespace Sonatype
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public int CompareTo(Artifact other)
+        {
+            if (String.IsNullOrEmpty(other.Version) && String.IsNullOrEmpty(this.Version))
+            {
+                return 0;
+            }
+            if (String.IsNullOrEmpty(other.Version) )
+            {
+                return 1;
+            }
+            if (String.IsNullOrEmpty(this.Version))
+            {
+                return -1;
+            }
+            String versionOther = other.Version.Replace(".","").Replace("-","").Trim();
+            String thisVersion=Version.Replace(".","").Replace("-","").Trim();
+
+            for (int i = 0; i < versionOther.Length; i++)
+            {
+                if (thisVersion.Length <= i)
+                {
+                    break;
+                }
+                if (!thisVersion[i].Equals(versionOther[i])){
+                    return GetComparingResult(versionOther[i], thisVersion[i]);
+                }
+            }
+            return thisVersion.Length-versionOther.Length;
+        }
+
+        private int GetComparingResult(char versionOther, char thisVersion)
+        {
+            int tmpResult = versionOther - thisVersion;
+            if (tmpResult < 0)
+            {
+                return 1;
+            }
+            else if (tmpResult > 0)
+            {
+                return -1;
+            }
+            return 0;
         }
     }
 }
